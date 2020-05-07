@@ -44,16 +44,23 @@ if (!process.env.HUBOT_RSS_LIMIT_ON_ADD) { process.env.HUBOT_RSS_LIMIT_ON_ADD = 
 module.exports = function (robot) {
   const logger = {
     info(msg) {
-      if (debug.enabled) { return debug(msg); }
+      if (debug.enabled) {
+        debug(msg);
+
+        if (typeof msg !== 'string') { msg = JSON.stringify(msg); }
+
+        return robot.logger.info(`${debug.namespace}: ${msg}`);
+      }
       // eslint-disable-next-line no-param-reassign
-      if (typeof msg !== 'string') { msg = JSON.stringify(msg); }
-      return robot.logger.info(`${debug.namespace}: ${msg}`);
     },
     error(msg) {
-      if (debug.enabled) { return debug(msg); }
-      // eslint-disable-next-line no-param-reassign
-      if (typeof msg !== 'string') { msg = JSON.stringify(msg); }
-      return robot.logger.error(`${debug.namespace}: ${msg}`);
+      if (debug.enabled) {
+        debug(msg);
+
+        if (typeof msg !== 'string') { msg = JSON.stringify(msg); }
+
+        return robot.logger.error(`${debug.namespace}: ${msg}`);
+      }
     },
   };
 
